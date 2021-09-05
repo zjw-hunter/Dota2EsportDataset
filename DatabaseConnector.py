@@ -1,14 +1,12 @@
 from pymongo import MongoClient
 from pprint import pprint
 
-from pymongo.operations import InsertOne
-
 class DatabaseConnector():
 
     DOTA_COLLECTIONS = ["Players", "Matches", "Teams", "Leagues", "Heroes"]
     client = MongoClient("mongodb://localhost:27017")
     db = client.Dota2ProMatches
-    def __init__(self) -> None:
+    def __init__(self):
         pass
 
     def getServerStatus(self):
