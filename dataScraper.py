@@ -3,7 +3,9 @@ from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 import pprint as pp
 import re
-from datetime import date, datetime
+from datetime import datetime
+from player import player
+from league import league
 
 
 class dataScraper():
@@ -44,17 +46,16 @@ class dataScraper():
         # dateArray = self.processDateStringArray(str(tourneySoup.find('div', string='Dates:').fetchNextSiblings()[0].contents[0]).replace(',', '').split(' '))
         teamList = []
         for team in tourneySoup.select('div.teamcard center b a'):
-            playerList = []
-            for player in team.findParent().findParent().findNextSibling().select('td a'):
-                playerList.append({
-                    "tag"
-                })
-            team = {
-                'result': team.findParent().findParent().findNextSibling().select('td a'),
-                'players': [],
-                'org': team.contents[0]
-            }
-            teamList.append(team)
+            if( "<s>" not in str(team.contents[0])):
+                playerList = []
+                for player in team.findParent().findParent().findNextSibling().select('td a'):
+                    playerList.append()
+                team = {
+                    'result': team.findParent().findParent().findNextSibling().select('td a'),
+                    'players': [],
+                    'org': team.contents[0]
+                }
+                teamList.append(team)
 
         return teamList
 
@@ -91,18 +92,26 @@ class dataScraper():
             return[startDate, endDate]
         else:
             return False
-    
+    #returns a player object scraped from the url provided
     def getPlayer(self, playerUrl):
-        player = {
-            'tag': None,
-            'name': None,
-            'birthday': None,
-            'playerID': None,
-            'country': None
-        }
 
         uClient = uReq(playerUrl)
+        playerSoup = soup(uClient.read(), "html.parser")
+        uClient.close()
 
+        tag = playerSoup.select('h1 span')[0].contents[0]
+        name = playerSoup.find_all("div", string=re.compile(r'.*Name:'))[-1].fetchNextSiblings()[0].contents[0]
+        birthDay = datetime.strptime(playerSoup.find("div", string="Birth:").fetchNextSiblings()[0].contents[0], '%B %d, %Y')
+        playerID = int(playerSoup.select('a.external.text i.lp-dotabuff')[0].parent.attrs['href'].split('/')[5])
+        country = []
+        for flag in playerSoup.select('div.infobox-cell-2 span.flag a'):
+            country.append(flag.attrs['title'])
+        roles = []
+        for role in playerSoup.find('div', string="Role(s):").fetchNextSiblings()[0].children:
+            if( role.contents):
+                roles.append(role.contents[0])
+            
+        return player(tag, name, birthDay, playerID, country, roles)
 
 
         
@@ -110,11 +119,11 @@ class dataScraper():
 
         
 
-
-
+myLink5 = 'https://liquipedia.net/dota2/Arteezy'
+myLink4 = 'https://liquipedia.net/dota2/March_(Park_Tae-won)'
 myLink = 'https://liquipedia.net/dota2/ESL_One/Katowice/2018'
 myLink2 = 'https://liquipedia.net/dota2/I-league/Season_2'
-myLink3 = 'https://liquipedia.net/dota2/Nexon_Sponsorship_League/Season_2'
+myLink3 = 'https://liquipedia.net/dota2/Nexon_Sponsorship_League/Season_1'
 myDS = dataScraper()
-pp.pprint(myDS.getTourneyDetails(myLink))
+pp.pprint(myDS.getPlayer(myLink4).getMongoObj())
 
