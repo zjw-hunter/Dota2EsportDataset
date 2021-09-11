@@ -1,11 +1,12 @@
 from datetime import datetime
+from enum import Enum
 from dateutil.relativedelta import relativedelta
 
 class player():
 
-    def __init__(self, tag, name, birthday, playerID, country, roles):
+    def __init__(self, tag, playerName, birthday, playerID, country, roles):
         self._tag = tag
-        self._name = name
+        self._playerName = playerName
         self._birthday = birthday
         self._playerID = playerID
         self._country = country
@@ -17,10 +18,17 @@ class player():
     def getMongoObj(self):
         return {
             "tag": self._tag,
-            "name": self._name,
+            "playerName": self._playerName,
             "birthday": self._birthday,
             "playerID": self._playerID,
             "country": self._country,
             "roles": self._roles
         }
-    
+
+class playerAttributes(Enum):
+    TAG = 'tag'
+    PLAYERNAME = 'playerName'
+    BIRTHDAY = 'birthday'
+    PLAYERID = 'playerID'
+    COUNTRY = 'country'
+    ROLES = 'roles'

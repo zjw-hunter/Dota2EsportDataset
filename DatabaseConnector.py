@@ -1,5 +1,12 @@
+from team import teamAttributes
 from pymongo import MongoClient
 from pprint import pprint
+
+from league import league, leagueAttributes
+from player import player, playerAttributes
+from team import team, teamAttributes
+
+from enum import Enum
 
 class DatabaseConnector():
 
@@ -18,18 +25,18 @@ class DatabaseConnector():
     # obj is the data, cName is the collection to add the document to.
     # true if operation worked, otherwise false
     def insertMany(self, data, cName):
-        if(cName not in self.DOTA_COLLECTIONS):
+        if(cName not in databaseCollections):
             return False
         if(data is None):
             return False
         try:
-            if( cName == "Players"):
+            if( cName.value == "Players"):
                 self.db.Players.insert_many(data)
-            elif( cName == "Matches"):
+            elif( cName.value == "Matches"):
                 self.db.Matches.insert_many(data)
-            elif( cName == "Teams"):
+            elif( cName.value == "Teams"):
                 self.db.Teams.insert_many(data)
-            elif( cName == "Leagues"):
+            elif( cName.value == "Leagues"):
                 self.db.Leagues.insert_many(data)
             else:
                 return False
@@ -37,3 +44,19 @@ class DatabaseConnector():
         except Exception as e:
             print(e)
             return False
+    
+    def getDocumentByAttribute(self, value, attribute):
+        if(attribute in leagueAttributes):
+            return 1
+        elif(attribute in playerAttributes):
+            return 2
+        elif(attribute in teamAttributes):
+            return 3
+        return False
+
+class databaseCollections(Enum):
+    PLAYERS = 'Players'
+    MATCHES = 'Matches'
+    TEAMS = 'Teams'
+    LEAGUES = 'Leagues'
+    HEROES = 'Heroes'
