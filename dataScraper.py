@@ -1,15 +1,16 @@
-from DatabaseConnector import DatabaseConnector
+from DatabaseConnector import DatabaseConnector, databaseCollections
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 import pprint as pp
 import re
 from datetime import datetime
-from player import player
+from player import player, playerAttributes
 from league import league
-from team import team
+from team import team as teamObj
 
 class dataScraper():
 
+    dbc = DatabaseConnector()
     baseUrl = 'https://liquipedia.net'
     tourneyListUrl = 'https://liquipedia.net/dota2/Tier_1_Tournaments'
     def __init__(self):
@@ -28,47 +29,48 @@ class dataScraper():
         return returnList
     
     def getTourneyDetails(self, tourneyURL):
-        returnObj = {
-            'name': None,
-            'id': None,
-            'prizePool': None,
-            'startDate': None,
-            'endDate': None,
-            'teams': None
-        }
+        
         uClient = uReq(tourneyURL)
         tourneySoup = soup(uClient.read(), "html.parser")
         uClient.close()
         
-        # tourneyID = tourneySoup.select('a.external.text i.lp-dotabuff')[0].parent.attrs['href'].split('/')[5]
-        # tourneyName = tourneySoup.select('h1 span')[0].contents[0]
-        # tourneyPrizePoolString = re.search(r'\$(\d|\,)+', str(tourneySoup.find('div', string="Prize Pool:").fetchNextSiblings()[0])).group(0)
-        # tPP = int(tourneyPrizePoolString[1:].replace(',', ''))
-        # dateArray = self.processDateStringArray(str(tourneySoup.find('div', string='Dates:').fetchNextSiblings()[0].contents[0]).replace(',', '').split(' '))
+        tourneyID = tourneySoup.select('a.external.text i.lp-dotabuff')[0].parent.attrs['href'].split('/')[5]
+        tourneyName = tourneySoup.select('h1 span')[0].contents[0]
+        tourneyPrizePoolString = re.search(r'\$(\d|\,)+', str(tourneySoup.find('div', string="Prize Pool:").fetchNextSiblings()[0])).group(0)
+        tPP = int(tourneyPrizePoolString[1:].replace(',', ''))
+        dateArray = self.processDateStringArray(str(tourneySoup.find('div', string='Dates:').fetchNextSiblings()[0].contents[0]).replace(',', '').split(' '))
         teamList = []
-
         placeOrder = []
+        placeBuckets = {}
+
+
         for line in tourneySoup.select('table.prizepooltable span.team-template-text a'):
             placeOrder.append(line.contents[0])
-        for team in tourneySoup.select('div.teamcard center b a'):
-            if( "<s>" not in str(team.contents[0])):
+        
+        i = 0
+        for bucket in tourneySoup.select('table.prizepooltable tr td b'):
+            try: 
+                bucketSize = int(bucket.parent.attrs['rowspan'])
+                for team in placeOrder[i:i+bucketSize]:
+                    placeBuckets[team] = bucket.contents[-1].split('-')[0]
+                i+= bucketSize -1
+            except: 
+                placeBuckets[placeOrder[i]] = bucket.contents[-1].strip()
+            i += 1
+        
+        for item in tourneySoup.select('div.teamcard center b a'):
+            if( "<s>" not in str(item.contents[0])):
                 playerList = []
-                # for lineItem in team.findParent().findParent().findNextSibling().select('tr'):
-                #     if(lineItem.find(string = re.compile(r'^([12345C])$'))):
-                #         playerList.append(
-                #             [ lineItem.find(string = re.compile(r'^([12345C])$')),
-                #                self.getPlayer( self.baseUrl + str(lineItem.contents[-1].contents[-1].attrs['href']))
-                #             ])
-                #     #lineItem.contents[-1].contents[-1]
-            
-                team = {
-                    'result': None,
-                    'players': playerList,
-                    'org': team.contents[0]
-                }
-                teamList.append(team)
+                for lineItem in item.findParent().findParent().findNextSibling().select('tr'):
+                    if(lineItem.find(string = re.compile(r'^([12345C])$'))):
+                        playerList.append(
+                            [ lineItem.find(string = re.compile(r'^([12345C])$')),
+                               self.getPlayer( self.baseUrl + str(lineItem.contents[-1].contents[-1].attrs['href']))
+                            ])
+                teamList.append(teamObj(tourneyID, placeBuckets[item.contents[0]], item.contents[0], playerList).getMongoObj())
+                
 
-        return placeOrder
+        return league(tourneyName, tourneyID, tPP, dateArray[0], dateArray[1], teamList, tourneyURL)
 
     #Returns [StartDate, EndDate] both are datetime.datetime objects
     def processDateStringArray(self, dsa):
@@ -105,7 +107,10 @@ class dataScraper():
             return False
     #returns a player object scraped from the url provided
     def getPlayer(self, playerUrl):
-
+        # try: 
+        #     thePlayer = self.dbc.getDocumentByAttribute(playerUrl, playerAttributes.URL)
+        # if( ):
+        #     return 
         uClient = uReq(playerUrl)
         playerSoup = soup(uClient.read(), "html.parser")
         uClient.close()
@@ -130,7 +135,13 @@ class dataScraper():
         for role in playerSoup.find('div', string="Role(s):").fetchNextSiblings()[0].children:
             if( role.contents):
                 roles.append(role.contents[0])
-        return player(tag, name, birthDay, playerID, country, roles)
+
+        returnable = player(tag, name, birthDay, playerID, country, roles, playerUrl)
+        try:
+            self.dbc.insertMany([returnable.getMongoObj()], databaseCollections.PLAYERS)
+        except Exception as e:
+            print(e)
+        return returnable
 
 
         
@@ -144,5 +155,5 @@ myLink = 'https://liquipedia.net/dota2/ESL_One/Katowice/2018'
 myLink2 = 'https://liquipedia.net/dota2/I-league/Season_2'
 myLink3 = 'https://liquipedia.net/dota2/Nexon_Sponsorship_League/Season_1'
 myDS = dataScraper()
-pp.pprint(myDS.getTourneyDetails(myLink))
+pp.pprint(myDS.getPlayer(myLink5))
 

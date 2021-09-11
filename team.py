@@ -7,6 +7,10 @@ class team():
         self._result = result
         self._org = org
         self._players = players
+
+    @classmethod
+    def fromDict(cls, teamDict):
+        return cls(teamDict['leagueID'], teamDict['result'], teamDict['org'], teamDict['players'])
     
     def getMongoObj(self):
         return {

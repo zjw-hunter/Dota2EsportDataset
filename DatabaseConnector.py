@@ -1,6 +1,6 @@
 from team import teamAttributes
 from pymongo import MongoClient
-from pprint import pprint
+import pprint as pp
 
 from league import league, leagueAttributes
 from player import player, playerAttributes
@@ -46,13 +46,20 @@ class DatabaseConnector():
             return False
     
     def getDocumentByAttribute(self, value, attribute):
+        returnable = []
         if(attribute in leagueAttributes):
-            return 1
+            results = self.db.Leagues.find({attribute.value: value})
+            for iterable in results:
+                returnable.append(league.from_dict(iterable))
         elif(attribute in playerAttributes):
-            return 2
+            results = self.db.Players.find({attribute.value: value})
+            for iterable in results:
+                returnable.append(player.fromDict(iterable))
         elif(attribute in teamAttributes):
-            return 3
-        return False
+            results = self.db.Teams.find({attribute.value: value})
+            for iterable in results:
+                returnable.append(player.fromDict(iterable))
+        return returnable
 
 class databaseCollections(Enum):
     PLAYERS = 'Players'
