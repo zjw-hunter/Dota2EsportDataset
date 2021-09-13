@@ -1,6 +1,6 @@
 from team import teamAttributes
 from pymongo import MongoClient
-import pprint as pp
+# import pprint as pp
 
 from league import league, leagueAttributes
 from player import player, playerAttributes
@@ -10,11 +10,10 @@ from enum import Enum
 
 class DatabaseConnector():
 
-    DOTA_COLLECTIONS = ["Players", "Matches", "Teams", "Leagues", "Heroes"]
-    client = MongoClient("mongodb://localhost:27017")
-    db = client.Dota2ProMatches
-    def __init__(self):
-        pass
+    
+    def __init__(self, mongoString):
+        self.client = MongoClient(mongoString)
+        self.db = self.client.Dota2ProMatches
 
     def getServerStatus(self):
         return(self.db.command("serverStatus"))
@@ -44,8 +43,11 @@ class DatabaseConnector():
         except Exception as e:
             print(e)
             return False
-    
-    def getDocumentByAttribute(self, value, attribute):
+    def makeQuery(self, query, dbc):
+        return self.db.Leagues.find(query, {'url'})
+
+
+    def getDocumentsByAttribute(self, value, attribute):
         returnable = []
         if(attribute in leagueAttributes):
             results = self.db.Leagues.find({attribute.value: value})
@@ -67,3 +69,6 @@ class databaseCollections(Enum):
     TEAMS = 'Teams'
     LEAGUES = 'Leagues'
     HEROES = 'Heroes'
+
+#mongostring is "mongodb://localhost:27017" for local
+

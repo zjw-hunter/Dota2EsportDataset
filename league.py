@@ -17,7 +17,7 @@ class league():
     def from_dict(cls, leagueDict):
         return cls(leagueDict['leagueName'], leagueDict['leagueID'], leagueDict['prizePool'], leagueDict['startDate'], leagueDict['endDate'], leagueDict['teams'], leagueDict['url'])
 
-    def getMongoObject(self):
+    def getMongoObj(self):
         return {
             "leagueName": self._leagueName,
             "leagueID": self._leagueID,
