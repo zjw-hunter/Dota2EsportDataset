@@ -43,8 +43,19 @@ class DatabaseConnector():
         except Exception as e:
             print(e)
             return False
+            
+    # takes a query which is a dictionary using mongo syntax and a database Collection to look in
     def makeQuery(self, query, dbc):
-        return self.db.Leagues.find(query, {'url'})
+        if(dbc == databaseCollections.LEAGUES):
+            return self.db.Leagues.find(query)
+        elif(dbc == databaseCollections.TEAMS):
+            return self.db.Teams.find(query)
+        elif(dbc == databaseCollections.PLAYERS):
+            return self.db.Players.find(query)
+        elif(dbc == databaseCollections.HEROES):
+            return self.db.Heroes.find(query)
+        elif(dbc == databaseCollections.MATCHES):
+            return self.db.Matches.find(query)
 
 
     def getDocumentsByAttribute(self, value, attribute):
@@ -60,7 +71,7 @@ class DatabaseConnector():
         elif(attribute in teamAttributes):
             results = self.db.Teams.find({attribute.value: value})
             for iterable in results:
-                returnable.append(player.fromDict(iterable))
+                returnable.append(team.fromDict(iterable))
         return returnable
 
 class databaseCollections(Enum):
@@ -69,6 +80,3 @@ class databaseCollections(Enum):
     TEAMS = 'Teams'
     LEAGUES = 'Leagues'
     HEROES = 'Heroes'
-
-#mongostring is "mongodb://localhost:27017" for local
-

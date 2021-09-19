@@ -1,12 +1,13 @@
 # TIXStats
 
+To use the steam api you must generate a key and set the environmental variable 'STEAM_API_KEY' to its value.
 
-
-
+LOCALMONGOSTR
 Notes:
 
-    - Some teams have a name mismatch between the actual name and the name on the results notably: VG.r (Vici Gaming Reborn), 4 Anchors + Sea Captain, RoX, Relax, they have not been processed.
-    - Summit 5, 6 and 7 have a duplicate eventID so I have not included those teams in the team collection, the results are still intact however
+     Some teams have a name mismatch between the actual name and the name on the results notably: VG.r (Vici Gaming Reborn), 4 Anchors + Sea Captain, RoX, Relax, they have not been processed.
+    
+     Summit 5, 6 and 7 have a duplicate eventID so I have not included those teams in the team collection, the results are still intact however
 
 
 Events without event IDs (There will be no match data for these events):
