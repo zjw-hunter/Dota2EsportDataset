@@ -1,5 +1,3 @@
-from player import player
-from datetime import datetime
 from enum import Enum
 
 class league():

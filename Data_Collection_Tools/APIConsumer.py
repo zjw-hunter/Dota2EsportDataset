@@ -1,13 +1,11 @@
-from league import leagueAttributes
-from re import match
 from DatabaseConnector import DatabaseConnector, databaseCollections
 import datetime
 import requests
 import os
 import time
-import pprint
-from match import dotaMatch
-import league
+
+from Database_Objects.match import dotaMatch
+from Database_Objects.league import league
 
 class APIConsumer():
 

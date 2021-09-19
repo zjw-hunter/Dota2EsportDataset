@@ -4,9 +4,10 @@ from urllib.request import urlopen as uReq
 import pprint as pp
 import re
 from datetime import datetime
-from player import player, playerAttributes
-from league import league, leagueAttributes
-from team import team as teamObj
+
+from Database_Objects.player import player, playerAttributes
+from Database_Objects.league import league, leagueAttributes
+from Database_Objects.team import team as teamObj
 import traceback
 
 class dataScraper():
