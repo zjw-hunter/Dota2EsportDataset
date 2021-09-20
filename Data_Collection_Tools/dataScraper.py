@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 import pprint as pp
 import re
+import os
 from datetime import datetime
 
 from Database_Objects.player import player, playerAttributes
@@ -12,7 +13,7 @@ import traceback
 
 class dataScraper():
 
-    dbc = DatabaseConnector("mongodb://localhost:27017")
+    dbc = DatabaseConnector(os.environ['LOCALMONGOSTR'])
     baseUrl = 'https://liquipedia.net'
     tourneyListUrl = 'https://liquipedia.net/dota2/Tier_1_Tournaments'
     def __init__(self):
