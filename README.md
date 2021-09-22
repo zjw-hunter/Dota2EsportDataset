@@ -70,7 +70,11 @@ I included events from this [list](https://liquipedia.net/dota2/Tier_1_Tournamen
 In addition to the Dataset I also made some python classes for data collection and statistical operations. They are located in the source folder:
 
      /Dota2EsportDataset/Database_Objects/
-I have also made the data collection tools available, feel free to use them to update the dataset or scan a different list of tournaments. 
+I have also made the data collection tools available, feel free to use them to update the dataset or scan a different list of tournaments.
+
+The following query is useful for getting leagues / teams with exact playerids.
+
+     {teams: { $elemMatch: {"players": {$not: {$elemMatch: {'player.playerID': {$nin: <Array of Player IDs>}}}}}}}
 
 In order to use them you will need to set a few environmental variables:
 
