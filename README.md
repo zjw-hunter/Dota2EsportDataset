@@ -55,9 +55,9 @@ I included events from this [list](https://liquipedia.net/dota2/Tier_1_Tournamen
 **You will need mongoDB and the mongoDB database tools which is installed seperately.**
 
 - Some teams have a name mismatch between the actual name and the name on the results notably: VG.r (Vici Gaming Reborn), 4 Anchors + Sea Captain, RoX, Relax, they have not been processed.
-- Summit 5, 6 and 7 have a duplicate eventID 
+- Summit 5, 6 and 7 have a duplicate eventID
 - Players with no page on Liquipedia have not been processed.
-- Some events do not an eventID they are: 
+- Some events do not an eventID they are:
   - The International 2011
   - ASUS Open 2012 Finals
   - World Cyber Games 2012
@@ -82,7 +82,7 @@ The following query is useful for getting leagues / teams with exact playerids.
 
 In order to use them you will need to set a few environmental variables:
 
-- To use the steam api you must generate a key and set the environmental variable 'STEAM_API_KEY' to its value. 
+- To use the steam api you must generate a key and set the environmental variable 'STEAM_API_KEY' to its value.
 - I was using mongoDB locally so I set the environmental variable LOCALMONGOSTR to my mongoString.
 
 For more details on the steam API see [here](https://wiki.teamfortress.com/wiki/WebAPI)
