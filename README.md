@@ -1,14 +1,31 @@
-# TIXStats
+# Dota 2 Esport Dataset
+
+This Project was making a public dataset for professional dota leagues and matches.
+I included events from this [list](https://liquipedia.net/dota2/Tier_1_Tournaments)
+
+Database Specification:
+
+Leagues:
+| Field | Description |
+| ---------- | ----------------------------------------- |
+| _id | MongoDB internal id |
+| leagueName | String, The name of the league |
+| leagueID | String, The league's dotaTV id |
+| prizePool | Int, The league's prizepool in USD |
+| startDate | Date, The league's first main event day |
+| endDate | Date, The league's last main event day |
+| teams | Array, This contains json team objects |
+| url | String, This string is the url source for this data |
+
 
 To use the steam api you must generate a key and set the environmental variable 'STEAM_API_KEY' to its value.
 
-LOCALMONGOSTR
+LOCALMONGOSTR 
 Notes:
 
-     Some teams have a name mismatch between the actual name and the name on the results notably: VG.r (Vici Gaming Reborn), 4 Anchors + Sea Captain, RoX, Relax, they have not been processed.
-    
-     Summit 5, 6 and 7 have a duplicate eventID so I have not included those teams in the team collection, the results are still intact however
+Some teams have a name mismatch between the actual name and the name on the results notably: VG.r (Vici Gaming Reborn), 4 Anchors + Sea Captain, RoX, Relax, they have not been processed.
 
+Summit 5, 6 and 7 have a duplicate eventID so I have not included those teams in the team collection, the results are still intact however
 
 Events without event IDs (There will be no match data for these events):
 
