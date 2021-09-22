@@ -5,8 +5,8 @@ I included events from this [list](https://liquipedia.net/dota2/Tier_1_Tournamen
 
 Database Specification:
 
-<p align="center">
-Leagues
+**Leagues**
+
 | Field | type | Description |
 | ---------- | ------- | ----------------------------------------- |
 | leagueName | String | The name of the league |
@@ -16,7 +16,7 @@ Leagues
 | endDate | Date | The league's last main event day |
 | teams | Array | This contains json team objects |
 | url | String | This string is the url source for this data |
-</p>
+
 
 To use the steam api you must generate a key and set the environmental variable 'STEAM_API_KEY' to its value.
 
