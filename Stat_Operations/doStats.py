@@ -2,7 +2,7 @@ import Database_Objects.league as league
 import Database_Objects.match as dotaMatch
 import Database_Objects.player as player
 import Database_Objects.team as team
-import Database_Objects.regression as regression
+import regression as regression
 from DatabaseConnector import DatabaseConnector, databaseCollections
 import os
 from dateutil.relativedelta import relativedelta

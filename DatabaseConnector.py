@@ -91,15 +91,3 @@ class databaseCollections(Enum):
     LEAGUES = 'Leagues'
     HEROES = 'Heroes'
     REGRESSIONS = 'Regressions'
-
-
-# client = MongoClient(os.environ['LOCALMONGOSTR'])
-# db = client.Dota2ProMatches
-# tbu = db.Matches.find({})
-# for iter in tbu:
-#     if(not iter['matchID'] > 0 ):
-#         print(type(iter['matchID']))
-#     # db.Matches.update_one(
-#     #     {'_id': iter['_id']},
-#     #     {"$set": {'matchID': iter['matchID'][0]}})
-# client.close()

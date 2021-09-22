@@ -87,19 +87,3 @@ class APIConsumer():
                 toBeInserted.append(self.getMatch(matchID).getMongoObj())
                 print('Inserted match: ' + str(matchID))
         self.dbc.insertMany(toBeInserted, databaseCollections.MATCHES)
-
-
-myAPIC = APIConsumer()
-
-# matches = myAPIC.getMatchList("9633", datetime.datetime.fromtimestamp(1519102800), datetime.datetime.fromtimestamp(1519534800))
-# pprint.pprint(matches)
-# pprint.pprint(len(matches))
-
-# myMatch = myAPIC.getMatch(3752505318)
-# pprint.pprint(myMatch.players)
-myDBC = DatabaseConnector(os.environ['LOCALMONGOSTR'])
-leagueList = []
-for item in myDBC.makeQuery({}, databaseCollections.LEAGUES):
-    leagueList.append(league.league.from_dict(item))
-
-myAPIC.fullConsume(leagueList)

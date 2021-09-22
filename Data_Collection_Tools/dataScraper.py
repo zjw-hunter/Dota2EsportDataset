@@ -203,7 +203,3 @@ class dataScraper():
         for item in inDB:
             fullList.remove(item['url'])
         return fullList    
-
-myScraper = dataScraper()
-# to Run the script uncomment the following line and run dataScraper.py in the command line.
-# myScraper.fullScrape()
