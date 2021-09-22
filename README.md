@@ -50,6 +50,10 @@ I included events from this [list](https://liquipedia.net/dota2/Tier_1_Tournamen
 
 ## Dataset Notes
 
+**To get the dataset onto your platform use the [mongorestore](https://docs.mongodb.com/database-tools/mongorestore/#examples) command on the directory containing the release files.**
+
+**You will need mongoDB and the mongoDB database tools which is installed seperately.**
+
 - Some teams have a name mismatch between the actual name and the name on the results notably: VG.r (Vici Gaming Reborn), 4 Anchors + Sea Captain, RoX, Relax, they have not been processed.
 - Summit 5, 6 and 7 have a duplicate eventID 
 - Players with no page on Liquipedia have not been processed.
