@@ -5,18 +5,18 @@ I included events from this [list](https://liquipedia.net/dota2/Tier_1_Tournamen
 
 Database Specification:
 
-Leagues:
-| Field | Description |
-| ---------- | ----------------------------------------- |
-| _id | MongoDB internal id |
-| leagueName | String, The name of the league |
-| leagueID | String, The league's dotaTV id |
-| prizePool | Int, The league's prizepool in USD |
-| startDate | Date, The league's first main event day |
-| endDate | Date, The league's last main event day |
-| teams | Array, This contains json team objects |
-| url | String, This string is the url source for this data |
-
+<p align="center">
+Leagues
+| Field | type | Description |
+| ---------- | ------- | ----------------------------------------- |
+| leagueName | String | The name of the league |
+| leagueID | String | The league's dotaTV id |
+| prizePool | Int | The league's prizepool in USD |
+| startDate | Date | The league's first main event day |
+| endDate | Date | The league's last main event day |
+| teams | Array | This contains json team objects |
+| url | String | This string is the url source for this data |
+</p>
 
 To use the steam api you must generate a key and set the environmental variable 'STEAM_API_KEY' to its value.
 
