@@ -76,7 +76,7 @@ In addition to the Dataset I also made some python classes for data collection a
      /Dota2EsportDataset/Database_Objects/
 I have also made the data collection tools available, feel free to use them to update the dataset or scan a different list of tournaments.
 
-The following query is useful for getting leagues / teams with exact playerids.
+The following query is useful for getting leagues with exact playerids.
 
      {teams: { $elemMatch: {"players": {$not: {$elemMatch: {'player.playerID': {$nin: <Array of Player IDs>}}}}}}}
 
